@@ -1,0 +1,19 @@
+public class EnglishDraughtsRules {
+    public static void main(String[] args) {
+        System.out.println("=== Basic Rules of English Draughts (Checkers) ===\n");
+
+        System.out.println("1. The game is played on an 8x8 board using only the dark squares.");
+        System.out.println("2. Each player starts with 12 pieces placed on the dark squares of the first three rows.");
+        System.out.println("3. One player controls the light-colored pieces, and the other controls the dark-colored pieces.");
+        System.out.println("4. Players take turns moving one piece at a time.");
+        System.out.println("5. Regular pieces move diagonally forward to an adjacent empty dark square.");
+        System.out.println("6. A piece captures an opponent’s piece by jumping diagonally over it to an empty square immediately beyond.");
+        System.out.println("7. Multiple captures can be made in a single turn if possible.");
+        System.out.println("8. When a piece reaches the farthest row from its starting position, it becomes a King.");
+        System.out.println("9. Kings can move and capture diagonally both forward and backward.");
+        System.out.println("10. The goal of the game is to capture all of your opponent’s pieces or block them so they cannot move.");
+
+        System.out.println("\n===============================================");
+        System.out.println("That’s it! These are the basic rules of English Draughts.");
+    }
+}
