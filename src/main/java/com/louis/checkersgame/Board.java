@@ -2,29 +2,30 @@ package com.louis.checkersgame;
 
 public class Board {
 
-    //Board represented as an 8x8 2D array
-    //each cell can contain a piece or be null (empty)
-    private Piece [][] board;
+    // Board represented as an 8x8 2D array
+    // Each cell can contain a Piece or be null (empty)
+    private Piece[][] board;
 
-    //Board size is constant
+    // Board size is constant
     private static final int BOARD_SIZE = 8;
 
-    // Constuctor - creates empty board
+    // Constructor - creates an empty board and initializes the starting positions
     public Board() {
-        this.board = new Piece[BOARD_SIZE] [BOARD_SIZE];
+        this.board = new Piece[BOARD_SIZE][BOARD_SIZE];
+        initializeBoard();
     }
 
-    // returns board size
+    // Returns board size
     public int getSize() {
         return BOARD_SIZE;
     }
 
-    //returns the 2D array representing the board
+    // Returns the 2D array representing the board
     public Piece[][] getBoard() {
         return board;
     }
 
-    //gets the piece at a specific position
+    // Gets the piece at a specific position
     public Piece getPieceAt(int row, int col) {
         if (!isValidPosition(row, col)) {
             return null;
@@ -32,18 +33,18 @@ public class Board {
         return board[row][col];
     }
 
-    //places a piece at a specific position
+    // Places a piece at a specific position
     public void setPieceAt(int row, int col, Piece piece) {
         if (isValidPosition(row, col)) {
             board[row][col] = piece;
-            //update the piece's position to match where it's being placed
+            // Update the piece’s position to match where it’s being placed
             if (piece != null) {
                 piece.setPosition(row, col);
             }
         }
     }
 
-    //removes a piece from a specific position
+    // Removes a piece from a specific position
     public Piece removePieceAt(int row, int col) {
         if (!isValidPosition(row, col)) {
             return null;
@@ -53,65 +54,73 @@ public class Board {
         return removedPiece;
     }
 
-    //Moves a piece from one position to another
-public boolean movePiece(int fromRow, int fromCol, int toRow int toCol) {
-        !isValidPosition(fromRow, fromCol) || !isValidPosition(toRow, toCol) {
-            return false;
-    }
-
-    //checks if there's actually a piece to move
-    Piece piece = board[fromRow][fromCol];
-        if(piece == null) {
+    // Moves a piece from one position to another
+    public boolean movePiece(int fromRow, int fromCol, int toRow, int toCol) {
+        // Validate source and destination positions
+        if (!isValidPosition(fromRow, fromCol) || !isValidPosition(toRow, toCol)) {
             return false;
         }
 
-    // check if destination is empty
-    if (board[toRow][toCol] != null) {
-        return false;
+        // Check if there’s actually a piece to move
+        Piece piece = board[fromRow][fromCol];
+        if (piece == null) {
+            return false;
+        }
+
+        // Check if destination is empty
+        if (board[toRow][toCol] != null) {
+            return false;
+        }
+
+        // Move the piece
+        board[toRow][toCol] = piece;
+        board[fromRow][fromCol] = null;
+        piece.setPosition(toRow, toCol);
+
+        // Optional: auto-kinging if reaching the opposite end
+        if (piece.getColor() == Piece.PieceColor.RED && toRow == BOARD_SIZE - 1) {
+            piece.makeKing();
+        } else if (piece.getColor() == Piece.PieceColor.BLACK && toRow == 0) {
+            piece.makeKing();
+        }
+
+        return true;
     }
 
-    //move the piece
-    board[toRow][toCol] = piece;
-    board[fromRow][fromCol] = null;
-    piece.setPosition(toRow, toCol);
-
-    return true;
-}
-
-//checks if a positon is within the board boundaries
+    // Checks if a position is within the board boundaries
     public boolean isValidPosition(int row, int col) {
         return row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE;
     }
-    //* Initializes the board with pieces in their starting positions
-    //     * RED pieces start at the top (rows 0-2)
-    //     * BLACK pieces start at the bottom (rows 5-7)
-    //     * Pieces are only placed on dark squares (checkerboard pattern)
+
+    /**
+     * Initializes the board with pieces in their starting positions.
+     * RED pieces start at the top (rows 0–2)
+     * BLACK pieces start at the bottom (rows 5–7)
+     * Pieces are only placed on dark squares (where (row + col) is odd)
+     */
     public void initializeBoard() {
-        //clear board first
+        // Clear the board first
         for (int row = 0; row < BOARD_SIZE; row++) {
-            for(int col = 0; col < BOARD_SIZE; col++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
                 board[row][col] = null;
             }
         }
-    }
 
-    //place RED pieces (rows 0-2)
-    for (int row = 0; row < 3; row++) {
-        for (int col = 0; col < BOARD_SIZE; col++) {
-            //only place pieces on dark squares
-            //Dark squares are where (row + col) is odd
-            if ((row + col) % 2 == 1) {
-                board[row][col] = new Piece(Piece.PieceColor.RED, row, col);
+        // Place RED pieces (rows 0–2)
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                if ((row + col) % 2 == 1) { // Only dark squares
+                    board[row][col] = new Piece(Piece.PieceColor.RED, row, col);
+                }
             }
         }
-    }
 
-    // place BLACK pieces (rows 5-7)
-    for (int row = 5; row < BOARD_SIZE; row++) {
-        for (int col = 0; col < BOARD_SIZE; col++) {
-            //only place pieces on dark squares
-            if ((row + col) % 2 == 1) {
-                board [row][col] = new Piece(Piece.PieceColor.BLACK, row, col);
+        // Place BLACK pieces (rows 5–7)
+        for (int row = 5; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                if ((row + col) % 2 == 1) { // Only dark squares
+                    board[row][col] = new Piece(Piece.PieceColor.BLACK, row, col);
+                }
             }
         }
     }
